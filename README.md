@@ -18,4 +18,3 @@ python tests/run_tests.py           # tests automatiques
 Onglet **Actions → Build Rapport TARL.exe → Run workflow**, puis télécharger l'artefact (ou créer un tag `v2.1` pour une Release).
 Détails : `LISEZMOI.txt`, `MODIFICATIONS.md`, `design-system/`.
 
-> ⚠️ Ne publiez jamais de vrais fichiers d'élèves (noms, numéros Massar) sur GitHub : le `.gitignore` les exclut.
