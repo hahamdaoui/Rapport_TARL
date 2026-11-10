@@ -1,0 +1,109 @@
+==========================================================
+  RAPPORT TARL  v2.1  -  LISEZ-MOI
+==========================================================
+
+Un enseignant de N'IMPORTE QUELLE matiere importe SON fichier Excel (colonnes en
+francais, en arabe, en anglais ou melangees, dans n'importe quel ordre), le
+programme reconnait les donnees, l'enseignant verifie si besoin, choisit la
+langue du rapport et obtient un rapport Word professionnel.
+
+PARCOURS (affiche en haut de la fenetre)
+  1 Importer    -> bouton "Ajouter des fichiers Excel" (.xlsx, .xlsm, .xls)
+  2 Analyser    -> automatique (feuilles, en-tetes, fusions, eleves, langue...)
+  3 Verifier    -> bouton "Verifier les colonnes" : chaque colonne a sa fonction
+                   detectee (liste deroulante modifiable) + statut
+                   Reconnu / A verifier / Ignore + apercu + controles
+  4 Langue      -> Francais, Arabe (mise en page droite->gauche) ou Anglais
+  5 Generer     -> rapport Word enregistre et ouvert
+
+DEUX TYPES DE FICHIERS SONT RECONNUS AUTOMATIQUEMENT
+  * Competences 0/1 en deux temps (pre-test + post-test, TaRL) : importer les
+    2 fichiers (ordre libre). Rapport de progression complet.
+  * Notes chiffrees (devoirs, controles, moyennes, absences, participation,
+    comportement, observations) : importer 1 fichier. Rapport d'analyse :
+    statistiques, niveaux, meilleurs/plus faibles, evaluations, eleves a
+    accompagner, recommandations. Les sections non calculables sont omises.
+  Le programme n'invente JAMAIS une note, une moyenne ou une donnee absente.
+
+RAPPORT EN 3 PAGES MAXIMUM (toutes langues, toutes matieres)
+  Page 1 : en-tete + pre-test (cartes de chiffres, 2 figures, tableau des
+           composantes, lecture des resultats, conclusion)
+  Page 2 : post-test + niveaux de maitrise + points forts / de vigilance
+  Page 3 : comparaison des deux tests, evolution individuelle, eleves a
+           accompagner en priorite
+  (Rapport de notes : vue d'ensemble / evaluations et eleves a accompagner /
+   resultats par eleve et recommandations.)  Les listes longues sont tronquees
+   pour rester dans les 3 pages.
+
+LANGUE DU RAPPORT  (independante de la langue du fichier)
+  Un fichier Excel arabe peut donner un rapport francais, arabe ou anglais.
+  Titres, tableaux, legendes, commentaires, recommandations, conclusions,
+  en-tetes et pieds de page suivent la langue choisie.
+  Arabe : paragraphes et tableaux droite->gauche, police Arial (arabe + latin),
+  textes mixtes geres, aucun texte arabe dans les images des graphiques.
+
+MODE SOMBRE : interrupteur en haut a gauche (memorise).
+
+
+----------------------------------------------------------
+A. CREER "Rapport TARL.exe"   (une seule fois, sur UN PC avec Python)
+----------------------------------------------------------
+  1. Installer Python 3.9+ : https://www.python.org/downloads/
+     (cocher "Add Python to PATH" ; garder "tcl/tk and IDLE")
+  2. Double-clic sur   Construire_EXE.bat   (Internet requis, 2 a 5 minutes)
+  3. Le dossier "Distribution" s'ouvre : "Rapport TARL.exe" (avec le logo).
+
+POUR LES COLLEGUES : copier "Rapport TARL.exe" -> double-clic. Rien a installer.
+  - Premier lancement : Windows peut afficher "Windows a protege votre PC"
+    -> "Informations complementaires" puis "Executer quand meme".
+  - Demarrage 5 a 10 secondes (normal pour un .exe unique).
+
+B. SANS EXE : double-clic sur Lancer_Rapport_TARL.bat (Python requis ;
+   les bibliotheques s'installent automatiquement la premiere fois).
+
+C. LIGNE DE COMMANDE
+   python main.py                                  -> interface graphique
+   python main.py pre.xlsx post.xlsx -o rapport.docx --lang ar
+   python main.py notes.xlsx -o rapport.docx --lang fr --prof "Nom" --directeur "Nom"
+
+
+----------------------------------------------------------
+D. AJOUTER VOS PROPRES SYNONYMES DE COLONNES (extensible)
+----------------------------------------------------------
+Ouvrez synonymes_utilisateur.json (a cote du programme / du .exe) et ajoutez des
+intitules a la bonne fonction, par ex. :
+   { "grade": ["اختبار الدورة", "Compo"], "behavior": ["الاخلاق"] }
+Fonctions : name, id, grade, average, absence, participation, behavior,
+observation, coefficient. Au prochain lancement ils sont reconnus.
+Dans l'interface, vous pouvez aussi corriger n'importe quelle colonne a la main.
+
+
+----------------------------------------------------------
+E. TESTS
+----------------------------------------------------------
+   python tests/run_tests.py      (60 controles : 10 scenarios + longueur de 3 pages maximum)
+Les fichiers de test sont generes dans tests/fixtures.
+
+
+----------------------------------------------------------
+F. EN CAS DE PROBLEME
+----------------------------------------------------------
+  - Fenetre absente : voir "rapport_tarl_erreur.log" dans C:\Users\VotreNom\
+  - "Fichier ouvert dans Word" : fermez le rapport puis recommencez.
+  - .xls ancien format : fonctionne avec la bibliotheque xlrd (incluse dans le
+    .exe) ; sinon enregistrez le fichier en .xlsx depuis Excel.
+  - Preferences : fichier .rapport_tarl.json (dossier personnel).
+
+CONTENU
+  main.py                   point d'entree (interface ou ligne de commande)
+  rapport_tarl/             excel_reader, structure_analyzer, column_detector,
+                            language_detector, data_normalizer, data_validator,
+                            data_processor, report_translator, arabic_rtl,
+                            docx_helpers, layout3, charts, report_skill,
+                            report_grade, report_generator, pipeline,
+                            app_ui, text_utils, logo_data
+  design-system/            design system (UI/UX Pro Max) + adaptation desktop
+  assets/                   logo (PNG) et icone (.ico)
+  exemples/                 rapports d'exemple FR / AR / EN
+  tests/                    scenarios de test automatiques
+  synonymes_utilisateur.json  vos synonymes personnalises

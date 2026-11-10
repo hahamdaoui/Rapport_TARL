@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# Build PyInstaller
+build/
+dist/
+Distribution/
+*.spec
+# Données des élèves : NE JAMAIS les publier sur GitHub
+*.xlsx
+*.xls
+*.xlsm
+*.docx
+!exemples/*.docx
+tests/fixtures/
+# Fichiers personnels
+.rapport_tarl.json
+rapport_tarl_erreur.log

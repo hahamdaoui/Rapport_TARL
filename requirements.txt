@@ -1,0 +1,7 @@
+openpyxl
+pandas
+numpy
+matplotlib
+python-docx
+rapidfuzz
+xlrd

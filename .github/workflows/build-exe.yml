@@ -1,0 +1,30 @@
+name: Build Rapport TARL.exe
+
+on:
+  workflow_dispatch:          # bouton "Run workflow" dans l'onglet Actions
+  push:
+    tags: ["v*"]              # ou : git tag v2.1 && git push --tags
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt pyinstaller
+      - name: Tests automatiques
+        run: python tests/run_tests.py
+      - name: Construire l'exécutable
+        run: pyinstaller --noconfirm --clean --onefile --windowed --name "Rapport TARL" --icon assets/rapport_tarl.ico --collect-data docx --paths . --hidden-import matplotlib.backends.backend_agg --hidden-import rapidfuzz --hidden-import xlrd main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Rapport-TARL-windows
+          path: dist/Rapport TARL.exe
+      - name: Publier dans les Releases (si tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/Rapport TARL.exe
